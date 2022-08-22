@@ -71,12 +71,23 @@ function nodesForRadius<T>(
   return clusters
 }
 
+/**
+ * The cluster manager.
+ */
 export class ClusterManager<T> {
   private getCoordinate: (data: T) => Coordinate
   private dataFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
   private options: Options
   private trees: Array<KDBush<Node<T>>>
 
+  /**
+   * Create a cluster manager.
+   *
+   * @param data The data for a point.
+   * @param getCoordinate A function to return the coordinate of a point.
+   * @param dataFactory A function to return the data for a cluster point.
+   * @param options Options to control the cluster generation.
+   */
   constructor(
     data: T[],
     getCoordinate: (data: T) => Coordinate,
@@ -114,7 +125,7 @@ export class ClusterManager<T> {
       nodes = nodesForRadius(
         nodes,
         this.trees[zoom + 1],
-        this.options.radius / (this.options.extent * Math.pow(2, zoom)),
+        this.options.radius / (this.options.tileSize * Math.pow(2, zoom)),
         this.options.minPoints,
         this.dataFactory
       )
@@ -128,6 +139,13 @@ export class ClusterManager<T> {
     }
   }
 
+  /**
+   * Gets the cluster data for a particular area and zoom level.
+   *
+   * @param bounds The area for which to return nodes.
+   * @param zoom The zoom level.
+   * @returns An array of nodes.
+   */
   getCluster(bounds: CoordinateBounds, zoom: number): Node<T>[] {
     const { minZoom, maxZoom } = this.options
     const z = Math.max(minZoom, Math.min(Math.floor(zoom), maxZoom + 1))

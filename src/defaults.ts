@@ -1,14 +1,15 @@
+/** Options for the cluster manager */
 export interface Options {
-  /** min zoom to generate clusters on */
+  /** The minimum zoom level to generate clusters on */
   minZoom: number
-  /** max zoom level to cluster the points on */
+  /** The maximum zoom level to generate clusters on */
   maxZoom: number
-  /** minimum points to form a cluster */
+  /** The minimum number of points required to form a cluster */
   minPoints: number
-  /** cluster radius in pixels */
+  /** The cluster radius in pixels */
   radius: number
-  /** tile extent (radius is calculated relative to it) */
-  extent: number
+  /** The size of the tiles (the radius is calculated relative to it) */
+  tileSize: number
   /** size of the KD-tree leaf node, affects performance */
   nodeSize: number
 }
@@ -19,6 +20,6 @@ export const defaultOptions: Options = {
   maxZoom: 16,
   minPoints: 2,
   radius: 40,
-  extent: 512,
+  tileSize: 512,
   nodeSize: 64
 }
