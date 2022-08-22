@@ -71,12 +71,13 @@ const clusterManager = new ClusterManager(
   makePoint
 )
 
-// Get the cluster for a zoom level
+// Get the cluster for a zoom level and area.
 const bounds = {
   northWest: { latitude: 90, longitude: -180 },
   southEast: { latitude: -90, longitude: 180 }
 }
-const cluster2 = clusterManager.getCluster(bounds, 2)
+const zoom = 2
+const cluster2 = clusterManager.getCluster(bounds, zoom)
 
 // The cluster is an array of nodes. The "data" property holds the original
 // data for the leaves, and the generated data for the cluster nodes. The
