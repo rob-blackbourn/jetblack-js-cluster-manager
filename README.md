@@ -1,6 +1,6 @@
 # @jetblack/cluster-manager
 
-A geospatial cluster manager.
+A geospatial cluster manager ([read the docs](https://rob-blackbourn.github.io/jetblack-js-cluster-manager/)).
 
 When a zoomable map contains a large number of points the map can look cluttered
 and the performance can be degraded when zoomed out. The cluster manager organizes the points
