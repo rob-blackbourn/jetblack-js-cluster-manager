@@ -10,7 +10,7 @@ This package is based on the widely used and battle tested
 [supercluster](https://github.com/mapbox/supercluster)
 (which is probably what you should be using). This package differs in two ways.
 First it represents the data as a tree of nodes to make the structure directly
-accessible. Second it doesn't require the data to be presented with a specific
+accessible. Second it doesn't require the data to be presented in a specific
 shape, but takes a "getter" function to get the coordinate from the a data
 point.
 
