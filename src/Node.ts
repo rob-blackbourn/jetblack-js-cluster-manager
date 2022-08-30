@@ -1,7 +1,11 @@
 import { Coordinate, Point } from './types'
 import { sum } from './utils'
 
-/** A node in the cluster. */
+/**
+ * A node in the cluster.
+ *
+ * @typeParam T The type of a point
+ */
 export class Node<T> {
   /** The cartesian point derived fro the coordinate. */
   public point: Point
@@ -17,8 +21,10 @@ export class Node<T> {
   /**
    * Create a new node.
    *
+   * @typeParam T The type of a point
+   *
    * @param point The cartesian point for the coordinate.
-   * @param coordinate The coordinate.
+   * @param coordinate The latitude and longitude.
    * @param nodes The nodes contained by this node, if any.
    * @param parent The parent of this node, if the node is part of a cluster.
    * @param data The data for the node.

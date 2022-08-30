@@ -7,6 +7,8 @@ import { Coordinate, CoordinateBounds } from './types'
 
 /**
  * The cluster manager.
+ *
+ * @typeParam T The type of a point
  */
 export class ClusterManager<T> {
   private trees: Array<KDBush<Node<T>>>
@@ -16,9 +18,11 @@ export class ClusterManager<T> {
   /**
    * Create a cluster manager.
    *
-   * @param data The data for a point.
+   * @typeParam T The type of a point
+   *
+   * @param data The array of point data.
    * @param getCoordinate A function to return the coordinate of a point.
-   * @param dataFactory A function to return the data for a cluster point.
+   * @param dataFactory A function to return the data for a cluster node.
    * @param options Options to control the cluster generation.
    */
   constructor(
