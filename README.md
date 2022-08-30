@@ -2,6 +2,18 @@
 
 A geospatial cluster manager.
 
+When a zoomable map contains a large number of points the map can look cluttered
+and the performance can be degraded when zoomed out. The cluster manager organizes the points
+into nodes where nearby points are combined into a single node.
+
+This package is based on the widely used and battle tested
+[supercluster](https://github.com/mapbox/supercluster)
+(which is probably what you should be using). This package differs in two ways.
+First it represents the data as a tree of nodes to make the structure directly
+accessible. Second it doesn't require the data to be presented with a specific
+shape, but takes a "getter" function to get the coordinate from the a data
+point.
+
 ## Installation
 
 The package can be installed from npmjs.
@@ -49,7 +61,7 @@ const getCoordinates = (point) => ({
   longitude: point.geometry.coordinates[0],
 });
 
-// This function is used to make the data item when a cluster point
+// This function is used to make the point data when a node cluster
 // is generated.
 const makePoint = (coordinate, nodes) => ({
   type: "Feature",
