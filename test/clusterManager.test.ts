@@ -27,7 +27,7 @@ describe('nodes', () => {
   it('gets nodes for zoom levels', () => {
     const pointFeatures = places.features as Feature<Point>[]
     const zoomCount = [
-      [0, 33],
+      [0, 32],
       [1, 61],
       [2, 100],
       [3, 137],

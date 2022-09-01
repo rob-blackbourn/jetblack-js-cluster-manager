@@ -53,7 +53,7 @@ export class Node<T> {
   count(): number {
     return this.nodes.length === 0
       ? 1
-      : this.nodes.length + sum(this.nodes.map(node => node.count()))
+      : sum(this.nodes.map(node => node.count()))
   }
 
   /**
