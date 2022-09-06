@@ -8,6 +8,7 @@ const getCoordinates = (point: Feature<Point>) => ({
   latitude: point.geometry.coordinates[1],
   longitude: point.geometry.coordinates[0]
 })
+
 const makePoint = (
   coordinate: Coordinate,
   nodes: Node<Feature<Point>>[]
