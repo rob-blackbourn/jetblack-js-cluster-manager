@@ -6,9 +6,9 @@ import {
   calcEuclideanDistance
 } from './ClusterGenerator'
 import { Node } from './Node'
-import { Coordinate, CoordinateBounds, Point } from './types'
+import { Coordinate, CoordinateBounds, Point, Rectangle, Size } from './types'
 
-export type { Coordinate, CoordinateBounds, Options, Point }
+export type { Coordinate, CoordinateBounds, Options, Point, Rectangle, Size }
 
 export {
   ClusterManager,

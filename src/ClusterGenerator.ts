@@ -1,4 +1,4 @@
-import { Point, PointBounds } from './types'
+import { Point, PointBounds, Rectangle, Size } from './types'
 
 interface DistancePoint {
   index: number
@@ -15,15 +15,28 @@ export function calcEuclideanDistance(a: Point, b: Point): number {
   return Math.sqrt(x * x + y * y)
 }
 
+function adjustPoint(
+  point: Point,
+  offset: Point,
+  { width, height }: Size
+): Point {
+  const x = point.x + offset.x
+  const y = point.y + offset.y
+  return {
+    x: x < 0 ? x + width : x >= width ? x - width : x,
+    y: y < 0 ? y + height : y >= height ? y - height : y
+  }
+}
+
 export function generateDistanceMatrix<T>(
   data: T[],
   getPoint: (data: T) => Point,
-  bounds: PointBounds,
+  rectangle: Rectangle,
   calcDistance: (a: Point, b: Point) => number
 ): DistancePoint[][] {
   const boundsCenter = {
-    x: bounds.topLeft.x + (bounds.bottomRight.x - bounds.topLeft.x) / 2,
-    y: bounds.bottomRight.y + (bounds.topLeft.y - bounds.bottomRight.y) / 2
+    x: -rectangle.x + rectangle.width / 2,
+    y: -rectangle.y + rectangle.height / 2
   }
 
   // A square matrix to hold the distance between points.
@@ -46,10 +59,7 @@ export function generateDistanceMatrix<T>(
     for (let j = i + 1; j < data.length; ++j) {
       const dj = data[j]
       const pj = getPoint(dj)
-      const pj1 = {
-        x: pj.x + centerOffset.x,
-        y: pj.y + centerOffset.y
-      }
+      const pj1 = adjustPoint(pj, centerOffset, rectangle)
       const distance = calcDistance(boundsCenter, pj1)
       m[i][j].distance = distance
       m[j][i].distance = distance
@@ -73,22 +83,22 @@ export class ClusterGenerator<T> {
   constructor(
     points: T[],
     getPoint: (points: T) => Point,
-    bounds: PointBounds,
+    rectangle: Rectangle,
     calcDistance: (a: Point, b: Point) => number
   ) {
     this.points = points
     this.distanceMatrix = generateDistanceMatrix(
       points,
       getPoint,
-      bounds,
+      rectangle,
       calcDistance
     )
   }
 
-  within(index: number, distance: number): number[] {
+  within(index: number, distance: number): T[] {
     return this.distanceMatrix[index]
       .slice(1)
       .filter(v => v.distance <= distance)
-      .map(v => v.index)
+      .map(v => this.points[v.index])
   }
 }

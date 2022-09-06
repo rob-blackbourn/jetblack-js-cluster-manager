@@ -29,3 +29,10 @@ export interface PointBounds {
   /** The point at the bottom right. */
   bottomRight: Point
 }
+
+export interface Size {
+  width: number
+  height: number
+}
+
+export interface Rectangle extends Point, Size {}
