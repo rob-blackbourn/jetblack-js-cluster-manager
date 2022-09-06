@@ -1,5 +1,11 @@
 import { Feature, Point } from 'geojson'
-import { ClusterManager, Coordinate, ClusterGenerator, Node } from '../src'
+import {
+  ClusterManager,
+  Coordinate,
+  ClusterGenerator,
+  Node,
+  calcManhattanDistance
+} from '../src'
 import { coordinateToPoint } from '../src/tileMath'
 import { PointBounds } from '../src/types'
 
@@ -26,14 +32,19 @@ describe('neighbors', () => {
         y: Math.max(...data.map(p => p.y))
       }
     }
-    const neighbors = new ClusterGenerator(data, p => p, bounds)
+    const neighbors = new ClusterGenerator(
+      data,
+      p => p,
+      bounds,
+      calcManhattanDistance
+    )
 
     const tileSize = 256,
       zoom = 0,
       r = 30
     const distance = (r + r) / (tileSize * Math.pow(2, zoom))
 
-    const closest = neighbors.find(0, distance)
+    const closest = neighbors.within(0, distance)
     expect(closest.length).toBe(2)
   })
 })
