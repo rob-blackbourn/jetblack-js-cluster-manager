@@ -12,14 +12,17 @@ function calcBoundsCenter(bounds: PointBounds): Point {
   }
 }
 
-function calcCenterOffset(point: Point, boundsCenter: Point): Point {
-  return {
-    x: boundsCenter.x - point.x,
-    y: boundsCenter.y - point.y
-  }
+function calcManhattanDistance(a: Point, b: Point): number {
+  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y)
 }
 
-export class Neighbors<T> {
+function calcEuclideanDistance(a: Point, b: Point): number {
+  const x = a.x - b.x
+  const y = a.y - b.y
+  return Math.sqrt(x * x + y * y)
+}
+
+export class ClusterGenerator<T> {
   distances: DistancePoint[][] = []
 
   constructor(data: T[], getPoint: (data: T) => Point, bounds: PointBounds) {
@@ -47,8 +50,7 @@ export class Neighbors<T> {
           x: pj.x + centerOffset.x,
           y: pj.y + centerOffset.y
         }
-        const distance =
-          Math.abs(boundsCenter.x - pj1.x) + Math.abs(boundsCenter.y - pj1.y)
+        const distance = calcManhattanDistance(boundsCenter, pj1)
         this.distances[i][j].distance = distance
         this.distances[j][i].distance = distance
       }
@@ -63,9 +65,7 @@ export class Neighbors<T> {
     }
   }
 
-  find(i: number, r: number, zoom: number, tileSize: number): number[] {
-    const distance = (r + r) / (tileSize * Math.pow(2, zoom))
-
+  find(i: number, distance: number): number[] {
     return this.distances[i]
       .slice(1)
       .filter(v => v.distance <= distance)
