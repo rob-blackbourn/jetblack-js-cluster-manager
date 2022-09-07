@@ -5,23 +5,17 @@ import { Coordinate } from './types'
 
 export const sum = (a: number[]) => a.reduce((total, value) => total + value, 0)
 
-export function pop<V>(set: Set<V>): V {
-  const [value] = set.entries().next().value as [V, V]
-  set.delete(value)
-  return value
-}
-
 export function nodesForRadius<T>(
   parentNodes: Node<T>[],
   tree: ClusterGenerator<Node<T>>,
   radius: number,
   minPoints: number,
-  dataFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
+  nodeFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
 ): Node<T>[] {
   const clusters: Node<T>[] = []
+  // As nodes are used they are removed from the set.
   const candidates = new Set(parentNodes)
 
-  // As nodes are used they are removed from the set.
   for (let i = 0; i < parentNodes.length && candidates.size; ++i) {
     const node = parentNodes[i]
     if (!candidates.has(node)) {
@@ -57,7 +51,7 @@ export function nodesForRadius<T>(
         coordinate,
         cluster,
         node,
-        dataFactory(coordinate, cluster)
+        nodeFactory(coordinate, cluster)
       )
 
       clusters.push(clusterNode)

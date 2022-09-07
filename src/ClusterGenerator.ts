@@ -1,4 +1,4 @@
-import { Point, PointBounds, Rectangle, Size } from './types'
+import { Point, Rectangle, Size } from './types'
 
 interface DistancePoint {
   index: number
