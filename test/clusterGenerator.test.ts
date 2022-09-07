@@ -1,9 +1,6 @@
 import { Feature, Point as GeoJsonPoint } from 'geojson'
-import {
-  ClusterGenerator,
-  calcManhattanDistance,
-  calcEuclideanDistance
-} from '../src'
+import { calcManhattanDistance, calcEuclideanDistance } from '../src'
+import { ClusterGenerator } from '../src/ClusterGenerator'
 import { coordinateToPoint } from '../src/tileMath'
 import { Point, Rectangle } from '../src/types'
 

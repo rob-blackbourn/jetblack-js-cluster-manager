@@ -19,6 +19,17 @@ export interface Options {
   bounds: CoordinateBounds
 }
 
+export const WORLD_BOUNDS = {
+  northWest: {
+    latitude: 90,
+    longitude: -180
+  },
+  southEast: {
+    latitude: -90,
+    longitude: 180
+  }
+}
+
 /** Default options */
 export const defaultOptions: Options = {
   minZoom: 0,
@@ -27,14 +38,5 @@ export const defaultOptions: Options = {
   radius: 40,
   tileSize: 512,
   calcDistance: calcEuclideanDistance,
-  bounds: {
-    northWest: {
-      latitude: 90,
-      longitude: -180
-    },
-    southEast: {
-      latitude: -90,
-      longitude: 180
-    }
-  }
+  bounds: WORLD_BOUNDS
 }

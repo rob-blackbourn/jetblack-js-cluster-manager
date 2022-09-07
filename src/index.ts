@@ -4,16 +4,9 @@ import {
   calcEuclideanDistance,
   calcManhattanDistance
 } from './distanceCalculator'
-import { ClusterGenerator } from './ClusterGenerator'
 import { Node } from './Node'
-import { Coordinate, CoordinateBounds, Point, Rectangle, Size } from './types'
+import { Coordinate, CoordinateBounds, Point, Size } from './types'
 
-export type { Coordinate, CoordinateBounds, Options, Point, Rectangle, Size }
+export type { Coordinate, CoordinateBounds, Options, Point, Size }
 
-export {
-  ClusterManager,
-  Node,
-  ClusterGenerator,
-  calcEuclideanDistance,
-  calcManhattanDistance
-}
+export { ClusterManager, Node, calcEuclideanDistance, calcManhattanDistance }
