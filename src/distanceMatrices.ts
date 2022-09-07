@@ -71,20 +71,17 @@ export function generateDistanceMatrix<T>(
 
     for (let j = i + 1; j < data.length; ++j) {
       const point = adjustPoint(getPoint(data[j]), centerOffset, rectangle)
-      const distance = calcDistance(boundsCenter, point)
       // The distance from a to be is the same as the distance
       // from b to a, so fill in both entries.
-      m[i][j].distance = m[j][i].distance = distance
+      m[i][j].distance = m[j][i].distance = calcDistance(boundsCenter, point)
     }
 
     // The distance from a to a is 0.
     m[i][i].distance = 0
   }
 
-  // Sort the distance array for each point by distance.
-  for (let i = 0; i < data.length; ++i) {
-    m[i] = m[i].sort((a, b) => a.distance - b.distance)
-  }
+  // Sort in-place the distance array for each point by distance.
+  m.forEach(l => l.sort((a, b) => a.distance - b.distance))
 
   return m
 }
