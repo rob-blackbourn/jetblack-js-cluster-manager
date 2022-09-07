@@ -11,7 +11,7 @@ import { isPointInside } from './utils'
  * @typeParam T The type of a point.
  */
 export class ClusterGenerator<T> {
-  /** For each point, the distance to and index of, the other points */
+  /** For each point, the distance to and index of, the other points, sorted by distance. */
   private distanceMatrix: DistancePoint[][] = []
   /** The point getter */
   private getPoint: (points: T) => Point
@@ -21,6 +21,8 @@ export class ClusterGenerator<T> {
 
   /**
    * Create a cluster.
+   *
+   * @typeParam T The type of a point.
    *
    * @param points An array of points.
    * @param getPoint A point getter.
@@ -46,6 +48,8 @@ export class ClusterGenerator<T> {
   /**
    * Find points less than or equal to a given distance away.
    *
+   * @typeParam T The type of a point.
+   *
    * @param index The index of the point in the original array.
    * @param distance The maximum distance.
    * @returns An array of points.
@@ -57,6 +61,14 @@ export class ClusterGenerator<T> {
       .map(v => this.points[v.index])
   }
 
+  /**
+   * Find the points within a given area.
+   *
+   * @typeParam T The type of a point.
+   *
+   * @param bounds The bounds of the search area.
+   * @returns A list of points
+   */
   range(bounds: PointBounds): T[] {
     return this.points.filter(p => isPointInside(this.getPoint(p), bounds))
   }

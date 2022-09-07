@@ -101,6 +101,8 @@ export class ClusterManager<T> {
   /**
    * Gets the cluster data for a particular area and zoom level.
    *
+   * @typeParam T The type of a point.
+   *
    * @param bounds The area for which to return nodes.
    * @param zoom The zoom level.
    * @returns An array of nodes.

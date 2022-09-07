@@ -1,10 +1,22 @@
 import { Point, Rectangle, Size } from './types'
 
+/** The index of a given point and it's distance from another point */
 export interface DistancePoint {
+  /** The index of the point */
   index: number
+  /** The distance from another point */
   distance: number
 }
 
+/**
+ * Adjust a point by an offset. If the point lies outside
+ * the rectangle, adjust it by wrapping around.
+ *
+ * @param point A point.
+ * @param offset An offset, by which to adjust the point.
+ * @param param2 The size of the rectangle.
+ * @returns The adjusted point.
+ */
 function adjustPoint(
   point: Point,
   offset: Point,
@@ -18,6 +30,22 @@ function adjustPoint(
   }
 }
 
+function calcCenterOffset(point: Point, boundsCenter: Point): Point {
+  return {
+    x: boundsCenter.x - point.x,
+    y: boundsCenter.y - point.y
+  }
+}
+
+/**
+ * Generate a distance matrix.
+ *
+ * @param data An array of points.
+ * @param getPoint The point getter
+ * @param rectangle A rectangle defining the extent of the points.
+ * @param calcDistance A function to calculate the distance between two points.
+ * @returns An array in the same order as the provided points containing an array of point indices and distances, sorted by distance.
+ */
 export function generateDistanceMatrix<T>(
   data: T[],
   getPoint: (data: T) => Point,
@@ -37,24 +65,19 @@ export function generateDistanceMatrix<T>(
     }))
   )
 
-  // Calculate the distance between points.
+  // Calculate the distance between all the points.
   for (let i = 0; i < data.length; ++i) {
-    const di = data[i]
-    const pi = getPoint(di)
-    const centerOffset = {
-      x: boundsCenter.x - pi.x,
-      y: boundsCenter.y - pi.y
-    }
+    const centerOffset = calcCenterOffset(getPoint(data[i]), boundsCenter)
 
     for (let j = i + 1; j < data.length; ++j) {
-      const dj = data[j]
-      const pj = getPoint(dj)
-      const pj1 = adjustPoint(pj, centerOffset, rectangle)
-      const distance = calcDistance(boundsCenter, pj1)
-      m[i][j].distance = distance
-      m[j][i].distance = distance
+      const point = adjustPoint(getPoint(data[j]), centerOffset, rectangle)
+      const distance = calcDistance(boundsCenter, point)
+      // The distance from a to be is the same as the distance
+      // from b to a, so fill in both entries.
+      m[i][j].distance = m[j][i].distance = distance
     }
 
+    // The distance from a to a is 0.
     m[i][i].distance = 0
   }
 
