@@ -88,6 +88,7 @@ export class ClusterManager<T> {
         minPoints,
         pointFactory
       )
+      // Make the cluster for this zoom level.
       this.clusters[zoom] = new ClusterGenerator(
         nodes,
         p => p.point,
@@ -105,15 +106,20 @@ export class ClusterManager<T> {
    * @returns An array of nodes.
    */
   getCluster(bounds: CoordinateBounds, zoom: number): Node<T>[] {
+    // Get the cluster for the zoom level.
     const z = Math.max(
       this.minZoom,
       Math.min(Math.floor(zoom), this.maxZoom + 1)
     )
-    const tree = this.clusters[z]
+    const cluster = this.clusters[z]
+
+    // Get the point bounds from the coordinate bounds.
     const {
       topLeft: { x: minX, y: minY },
       bottomRight: { x: maxX, y: maxY }
     } = coordinateToPointBounds(bounds)
-    return tree.range(minX, minY, maxX, maxY)
+
+    // Get the nodes.
+    return cluster.range(minX, minY, maxX, maxY)
   }
 }

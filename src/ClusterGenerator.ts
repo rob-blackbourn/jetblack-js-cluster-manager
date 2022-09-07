@@ -2,9 +2,10 @@ import { DistancePoint, generateDistanceMatrix } from './distanceMatrices'
 import { Point, Rectangle } from './types'
 
 export class ClusterGenerator<T> {
-  distanceMatrix: DistancePoint[][] = []
-  points: T[]
-  getPoint: (points: T) => Point
+  private distanceMatrix: DistancePoint[][] = []
+  private getPoint: (points: T) => Point
+
+  public points: T[]
 
   constructor(
     points: T[],
