@@ -5,6 +5,18 @@ import { nodesForRadius } from './utils'
 import { Node } from './Node'
 import { Coordinate, CoordinateBounds, Point } from './types'
 
+/** The extreme north-west and south-east coordinates of the world. */
+export const WORLD_BOUNDS = {
+  northWest: {
+    latitude: 90,
+    longitude: -180
+  },
+  southEast: {
+    latitude: -90,
+    longitude: 180
+  }
+}
+
 /**
  * The cluster manager.
  *
@@ -32,15 +44,7 @@ export class ClusterManager<T> {
     options: Partial<Options> = {}
   ) {
     // Merge the options with the  default options.
-    const {
-      minZoom,
-      maxZoom,
-      minPoints,
-      radius,
-      tileSize,
-      calcDistance,
-      bounds: { northWest, southEast }
-    } = {
+    const { minZoom, maxZoom, minPoints, radius, tileSize, calcDistance } = {
       ...defaultOptions,
       ...options
     }
@@ -49,8 +53,8 @@ export class ClusterManager<T> {
     this.maxZoom = maxZoom
     this.clusters = new Array(maxZoom + 1)
 
-    const topLeft = coordinateToPoint(northWest)
-    const bottomRight = coordinateToPoint(southEast)
+    const topLeft = coordinateToPoint(WORLD_BOUNDS.northWest)
+    const bottomRight = coordinateToPoint(WORLD_BOUNDS.southEast)
     const rectangle = {
       x: topLeft.x,
       y: topLeft.y,

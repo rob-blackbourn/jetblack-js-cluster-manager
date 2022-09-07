@@ -15,20 +15,6 @@ export interface Options {
   tileSize: number
   /** The function to calculate the distance between two points */
   calcDistance: (a: Point, b: Point) => number
-  /** The coordinate bounds */
-  bounds: CoordinateBounds
-}
-
-/** The extreme north-west and south-east coordinates of the world. */
-export const WORLD_BOUNDS = {
-  northWest: {
-    latitude: 90,
-    longitude: -180
-  },
-  southEast: {
-    latitude: -90,
-    longitude: 180
-  }
 }
 
 /** Default options */
@@ -38,6 +24,5 @@ export const defaultOptions: Options = {
   minPoints: 2,
   radius: 40,
   tileSize: 512,
-  calcDistance: calcEuclideanDistance,
-  bounds: WORLD_BOUNDS
+  calcDistance: calcEuclideanDistance
 }

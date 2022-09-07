@@ -1,5 +1,5 @@
 import { ClusterManager } from './ClusterManager'
-import { Options, WORLD_BOUNDS } from './defaults'
+import { Options } from './defaults'
 import {
   calcEuclideanDistance,
   calcManhattanDistance
@@ -9,10 +9,4 @@ import { Coordinate, CoordinateBounds, Point, Size } from './types'
 
 export type { Coordinate, CoordinateBounds, Options, Point, Size }
 
-export {
-  ClusterManager,
-  Node,
-  calcEuclideanDistance,
-  calcManhattanDistance,
-  WORLD_BOUNDS
-}
+export { ClusterManager, Node, calcEuclideanDistance, calcManhattanDistance }

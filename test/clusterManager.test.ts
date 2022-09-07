@@ -1,11 +1,6 @@
 import { Feature, Point } from 'geojson'
-import {
-  ClusterManager,
-  Coordinate,
-  CoordinateBounds,
-  Node,
-  WORLD_BOUNDS
-} from '../src'
+import { ClusterManager, Coordinate, Node } from '../src'
+import { WORLD_BOUNDS } from '../src/ClusterManager'
 import { sum } from '../src/utils'
 
 import places from './fixtures/places.json'
