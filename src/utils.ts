@@ -6,7 +6,6 @@ import { Coordinate } from './types'
 export const sum = (a: number[]) => a.reduce((total, value) => total + value, 0)
 
 export function nodesForRadius<T>(
-  parentNodes: Node<T>[],
   tree: ClusterGenerator<Node<T>>,
   radius: number,
   minPoints: number,
@@ -14,10 +13,10 @@ export function nodesForRadius<T>(
 ): Node<T>[] {
   const clusters: Node<T>[] = []
   // As nodes are used they are removed from the set.
-  const candidates = new Set(parentNodes)
+  const candidates = new Set(tree.points)
 
-  for (let i = 0; i < parentNodes.length && candidates.size; ++i) {
-    const node = parentNodes[i]
+  for (let i = 0; i < tree.points.length && candidates.size; ++i) {
+    const node = tree.points[i]
     if (!candidates.has(node)) {
       continue
     }

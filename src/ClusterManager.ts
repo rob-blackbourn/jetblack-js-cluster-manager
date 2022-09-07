@@ -77,7 +77,6 @@ export class ClusterManager<T> {
       // the cluster area.
       const zoomRadius = radius / (tileSize * Math.pow(2, zoom))
       nodes = nodesForRadius(
-        nodes,
         this.trees[zoom + 1],
         zoomRadius,
         minPoints,
