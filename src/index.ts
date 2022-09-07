@@ -3,7 +3,7 @@ import { Options } from './defaults'
 import {
   calcEuclideanDistance,
   calcManhattanDistance
-} from './distanceMatrices'
+} from './distanceCalculator'
 import { ClusterGenerator } from './ClusterGenerator'
 import { Node } from './Node'
 import { Coordinate, CoordinateBounds, Point, Rectangle, Size } from './types'
