@@ -11,7 +11,7 @@ import { Coordinate, CoordinateBounds, Point } from './types'
  * @typeParam T The type of a point
  */
 export class ClusterManager<T> {
-  private trees: Array<ClusterGenerator<Node<T>>>
+  private clusters: Array<ClusterGenerator<Node<T>>>
   private minZoom: number
   private maxZoom: number
 
@@ -20,26 +20,33 @@ export class ClusterManager<T> {
    *
    * @typeParam T The type of a point
    *
-   * @param data The array of point data.
+   * @param points An array of points.
    * @param getCoordinate A function to return the coordinate of a point.
-   * @param dataFactory A function to return the data for a cluster node.
+   * @param pointFactory A function to return the point for a cluster node.
    * @param options Options to control the cluster generation.
    */
   constructor(
-    data: T[],
+    points: T[],
     getCoordinate: (data: T) => Coordinate,
-    dataFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T,
-    { northWest, southEast }: CoordinateBounds,
+    pointFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T,
     options: Partial<Options> = {}
   ) {
-    const { minZoom, maxZoom, minPoints, radius, tileSize, calcDistance } = {
+    const {
+      minZoom,
+      maxZoom,
+      minPoints,
+      radius,
+      tileSize,
+      calcDistance,
+      bounds: { northWest, southEast }
+    } = {
       ...defaultOptions,
       ...options
     }
 
     this.minZoom = minZoom
     this.maxZoom = maxZoom
-    this.trees = new Array(maxZoom + 1)
+    this.clusters = new Array(maxZoom + 1)
 
     const topLeft = coordinateToPoint(northWest)
     const bottomRight = coordinateToPoint(southEast)
@@ -50,9 +57,8 @@ export class ClusterManager<T> {
       height: bottomRight.y - topLeft.y
     }
 
-    // Generate a cluster object for each data point and index input points
-    // into a KD-tree.
-    let nodes: Node<T>[] = data.map(datum => {
+    // Generate a node for each point.
+    let nodes: Node<T>[] = points.map(datum => {
       const coordinate = getCoordinate(datum)
       return new Node(
         coordinateToPoint(coordinate),
@@ -63,26 +69,26 @@ export class ClusterManager<T> {
       )
     })
 
-    // Initialize the tree with all of the data points.
-    this.trees[maxZoom + 1] = new ClusterGenerator(
+    // Create an initial cluster from all the points.
+    this.clusters[maxZoom + 1] = new ClusterGenerator(
       nodes,
       p => p.point,
       rectangle,
       calcDistance
     )
 
-    // Zoom in a step at a time calculating a new cluster.
+    // Zoom in a step at a time calculating a new cluster from the previous.
     for (let zoom = maxZoom; zoom >= minZoom; --zoom) {
       // Rather than recalculating the points we increase the radius of
       // the cluster area.
       const zoomRadius = radius / (tileSize * Math.pow(2, zoom))
       nodes = nodesForRadius(
-        this.trees[zoom + 1],
+        this.clusters[zoom + 1],
         zoomRadius,
         minPoints,
-        dataFactory
+        pointFactory
       )
-      this.trees[zoom] = new ClusterGenerator(
+      this.clusters[zoom] = new ClusterGenerator(
         nodes,
         p => p.point,
         rectangle,
@@ -103,7 +109,7 @@ export class ClusterManager<T> {
       this.minZoom,
       Math.min(Math.floor(zoom), this.maxZoom + 1)
     )
-    const tree = this.trees[z]
+    const tree = this.clusters[z]
     const {
       topLeft: { x: minX, y: minY },
       bottomRight: { x: maxX, y: maxY }

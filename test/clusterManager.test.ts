@@ -61,8 +61,7 @@ describe('nodes', () => {
     const clusters = new ClusterManager<Feature<Point>>(
       pointFeatures.filter(p => p.geometry != null),
       getCoordinates,
-      makePoint,
-      bounds
+      makePoint
     )
     zoomCount.forEach(([zoom, count]) => {
       const cluster = clusters.getCluster(bounds, zoom)
@@ -91,8 +90,7 @@ describe('leaves', () => {
     const clusters = new ClusterManager<Feature<Point>>(
       pointFeatures,
       getCoordinates,
-      makePoint,
-      bounds
+      makePoint
     )
     const cluster = clusters.getCluster(bounds, 1)
     const leaves = cluster[0]

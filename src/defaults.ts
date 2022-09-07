@@ -1,5 +1,5 @@
-import { Point } from './types'
-import { calcEuclideanDistance } from './ClusterGenerator'
+import { CoordinateBounds, Point } from './types'
+import { calcEuclideanDistance } from './distanceCalculator'
 
 /** Options for the cluster manager */
 export interface Options {
@@ -15,6 +15,8 @@ export interface Options {
   tileSize: number
   /** The function to calculate the distance between two points */
   calcDistance: (a: Point, b: Point) => number
+  /** The coordinate bounds */
+  bounds: CoordinateBounds
 }
 
 /** Default options */
@@ -24,5 +26,15 @@ export const defaultOptions: Options = {
   minPoints: 2,
   radius: 40,
   tileSize: 512,
-  calcDistance: calcEuclideanDistance
+  calcDistance: calcEuclideanDistance,
+  bounds: {
+    northWest: {
+      latitude: 90,
+      longitude: -180
+    },
+    southEast: {
+      latitude: -90,
+      longitude: 180
+    }
+  }
 }
