@@ -114,12 +114,9 @@ export class ClusterManager<T> {
     const cluster = this.clusters[z]
 
     // Get the point bounds from the coordinate bounds.
-    const {
-      topLeft: { x: minX, y: minY },
-      bottomRight: { x: maxX, y: maxY }
-    } = coordinateToPointBounds(bounds)
+    const pointBounds = coordinateToPointBounds(bounds)
 
     // Get the nodes.
-    return cluster.range(minX, minY, maxX, maxY)
+    return cluster.range(pointBounds)
   }
 }

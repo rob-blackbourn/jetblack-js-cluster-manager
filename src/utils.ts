@@ -1,9 +1,18 @@
 import { ClusterGenerator } from './ClusterGenerator'
 import { Node } from './Node'
 import { pointToCoordinate } from './tileMath'
-import { Coordinate } from './types'
+import { Coordinate, Point, PointBounds } from './types'
 
 export const sum = (a: number[]) => a.reduce((total, value) => total + value, 0)
+
+export function isPointInside(point: Point, bounds: PointBounds): boolean {
+  return (
+    point.x >= bounds.topLeft.x &&
+    point.x <= bounds.bottomRight.x &&
+    point.y >= bounds.topLeft.y &&
+    point.y <= bounds.bottomRight.y
+  )
+}
 
 export function nodesForRadius<T>(
   tree: ClusterGenerator<Node<T>>,

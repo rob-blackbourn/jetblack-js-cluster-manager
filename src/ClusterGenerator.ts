@@ -1,5 +1,6 @@
 import { DistancePoint, generateDistanceMatrix } from './distanceMatrices'
-import { Point, Rectangle } from './types'
+import { Point, PointBounds, Rectangle } from './types'
+import { isPointInside } from './utils'
 
 /**
  * The cluster generator.
@@ -56,12 +57,7 @@ export class ClusterGenerator<T> {
       .map(v => this.points[v.index])
   }
 
-  range(minX: number, minY: number, maxX: number, maxY: number): T[] {
-    return this.points.filter(p => {
-      const point = this.getPoint(p)
-      return (
-        point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY
-      )
-    })
+  range(bounds: PointBounds): T[] {
+    return this.points.filter(p => isPointInside(this.getPoint(p), bounds))
   }
 }
