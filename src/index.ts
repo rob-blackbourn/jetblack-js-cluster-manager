@@ -1,10 +1,10 @@
 import { ClusterManager } from './ClusterManager'
 import { Options } from './defaults'
 import {
-  ClusterGenerator,
-  calcManhattanDistance,
-  calcEuclideanDistance
-} from './ClusterGenerator'
+  calcEuclideanDistance,
+  calcManhattanDistance
+} from './distanceMatrices'
+import { ClusterGenerator } from './ClusterGenerator'
 import { Node } from './Node'
 import { Coordinate, CoordinateBounds, Point, Rectangle, Size } from './types'
 

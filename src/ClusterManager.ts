@@ -1,4 +1,4 @@
-import { calcEuclideanDistance, ClusterGenerator } from './ClusterGenerator'
+import { ClusterGenerator } from './ClusterGenerator'
 import { defaultOptions, Options } from './defaults'
 import { coordinateToPoint, coordinateToPointBounds } from './tileMath'
 import { nodesForRadius } from './utils'
