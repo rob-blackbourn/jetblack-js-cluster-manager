@@ -1,14 +1,11 @@
 import { Feature, Point as GeoJsonPoint } from 'geojson'
 import {
-  ClusterManager,
-  Coordinate,
   ClusterGenerator,
-  Node,
   calcManhattanDistance,
   calcEuclideanDistance
 } from '../src'
 import { coordinateToPoint } from '../src/tileMath'
-import { Point, PointBounds, Rectangle } from '../src/types'
+import { Point, Rectangle } from '../src/types'
 
 import places from './fixtures/places.json'
 

@@ -1,3 +1,4 @@
+import { ClusterGenerator } from './ClusterGenerator'
 import { Node } from './Node'
 import { pointToCoordinate } from './tileMath'
 import { Coordinate } from './types'
@@ -12,7 +13,7 @@ export function pop<V>(set: Set<V>): V {
 
 export function nodesForRadius<T>(
   parentNodes: Node<T>[],
-  tree: KDBush<Node<T>>,
+  tree: ClusterGenerator<Node<T>>,
   radius: number,
   minPoints: number,
   dataFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
@@ -21,13 +22,16 @@ export function nodesForRadius<T>(
   const candidates = new Set(parentNodes)
 
   // As nodes are used they are removed from the set.
-  while (candidates.size) {
-    const node = pop(candidates)
+  for (let i = 0; i < parentNodes.length && candidates.size; ++i) {
+    const node = parentNodes[i]
+    if (!candidates.has(node)) {
+      continue
+    }
+    candidates.delete(node)
 
     // find all nearby points that are still available.
     const neighbors = tree
-      .within(node.point.x, node.point.y, radius)
-      .map(id => tree.points[id])
+      .within(i, radius)
       .filter(neighbor => candidates.has(neighbor))
     let numPoints = sum(neighbors.map(n => n.count())) + node.count()
 

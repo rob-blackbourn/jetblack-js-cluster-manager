@@ -1,9 +1,9 @@
-import KDBush from 'kdbush'
+import { calcEuclideanDistance, ClusterGenerator } from './ClusterGenerator'
 import { defaultOptions, Options } from './defaults'
 import { coordinateToPoint, coordinateToPointBounds } from './tileMath'
 import { nodesForRadius } from './utils'
 import { Node } from './Node'
-import { Coordinate, CoordinateBounds } from './types'
+import { Coordinate, CoordinateBounds, Point } from './types'
 
 /**
  * The cluster manager.
@@ -11,7 +11,7 @@ import { Coordinate, CoordinateBounds } from './types'
  * @typeParam T The type of a point
  */
 export class ClusterManager<T> {
-  private trees: Array<KDBush<Node<T>>>
+  private trees: Array<ClusterGenerator<Node<T>>>
   private minZoom: number
   private maxZoom: number
 
@@ -29,9 +29,10 @@ export class ClusterManager<T> {
     data: T[],
     getCoordinate: (data: T) => Coordinate,
     dataFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T,
+    { northWest, southEast }: CoordinateBounds,
     options: Partial<Options> = {}
   ) {
-    const { minZoom, maxZoom, minPoints, radius, tileSize, nodeSize } = {
+    const { minZoom, maxZoom, minPoints, radius, tileSize, calcDistance } = {
       ...defaultOptions,
       ...options
     }
@@ -39,6 +40,15 @@ export class ClusterManager<T> {
     this.minZoom = minZoom
     this.maxZoom = maxZoom
     this.trees = new Array(maxZoom + 1)
+
+    const topLeft = coordinateToPoint(northWest)
+    const bottomRight = coordinateToPoint(southEast)
+    const rectangle = {
+      x: topLeft.x,
+      y: topLeft.y,
+      width: bottomRight.x - topLeft.x,
+      height: bottomRight.y - topLeft.y
+    }
 
     // Generate a cluster object for each data point and index input points
     // into a KD-tree.
@@ -54,12 +64,11 @@ export class ClusterManager<T> {
     })
 
     // Initialize the tree with all of the data points.
-    this.trees[maxZoom + 1] = new KDBush(
+    this.trees[maxZoom + 1] = new ClusterGenerator(
       nodes,
-      p => p.point.x,
-      p => p.point.y,
-      nodeSize,
-      Float32Array
+      p => p.point,
+      rectangle,
+      calcDistance
     )
 
     // Zoom in a step at a time calculating a new cluster.
@@ -74,12 +83,11 @@ export class ClusterManager<T> {
         minPoints,
         dataFactory
       )
-      this.trees[zoom] = new KDBush(
+      this.trees[zoom] = new ClusterGenerator(
         nodes,
-        p => p.point.x,
-        p => p.point.y,
-        nodeSize,
-        Float32Array
+        p => p.point,
+        rectangle,
+        calcDistance
       )
     }
   }
@@ -101,7 +109,6 @@ export class ClusterManager<T> {
       topLeft: { x: minX, y: minY },
       bottomRight: { x: maxX, y: maxY }
     } = coordinateToPointBounds(bounds)
-    const ids = tree.range(minX, minY, maxX, maxY)
-    return ids.map(id => tree.points[id])
+    return tree.range(minX, minY, maxX, maxY)
   }
 }

@@ -1,3 +1,6 @@
+import { Point } from './types'
+import { calcEuclideanDistance } from './ClusterGenerator'
+
 /** Options for the cluster manager */
 export interface Options {
   /** The minimum zoom level to generate clusters on. Defaults to 0. */
@@ -10,8 +13,8 @@ export interface Options {
   radius: number
   /** The size of the tiles (the radius is calculated relative to it). Defaults to 512. */
   tileSize: number
-  /** size of the KD-tree leaf node, affects performance. Defaults to 64. */
-  nodeSize: number
+  /** The function to calculate the distance between two points */
+  calcDistance: (a: Point, b: Point) => number
 }
 
 /** Default options */
@@ -21,5 +24,5 @@ export const defaultOptions: Options = {
   minPoints: 2,
   radius: 40,
   tileSize: 512,
-  nodeSize: 64
+  calcDistance: calcEuclideanDistance
 }
