@@ -1,5 +1,11 @@
 import { Feature, Point } from 'geojson'
-import { ClusterManager, Coordinate, CoordinateBounds, Node } from '../src'
+import {
+  ClusterManager,
+  Coordinate,
+  CoordinateBounds,
+  Node,
+  WORLD_BOUNDS
+} from '../src'
 import { sum } from '../src/utils'
 
 import places from './fixtures/places.json'
@@ -47,24 +53,13 @@ describe('nodes', () => {
       [16, 162]
     ]
 
-    const bounds: CoordinateBounds = {
-      northWest: {
-        latitude: 90,
-        longitude: -180
-      },
-      southEast: {
-        latitude: -90,
-        longitude: 180
-      }
-    }
-
     const clusters = new ClusterManager<Feature<Point>>(
       pointFeatures.filter(p => p.geometry != null),
       getCoordinates,
       makePoint
     )
     zoomCount.forEach(([zoom, count]) => {
-      const cluster = clusters.getCluster(bounds, zoom)
+      const cluster = clusters.getCluster(WORLD_BOUNDS, zoom)
       expect(cluster.length).toBe(count)
     })
   })
@@ -76,23 +71,12 @@ describe('leaves', () => {
       p => p.geometry != null
     )
 
-    const bounds: CoordinateBounds = {
-      northWest: {
-        latitude: 90,
-        longitude: -180
-      },
-      southEast: {
-        latitude: -90,
-        longitude: 180
-      }
-    }
-
     const clusters = new ClusterManager<Feature<Point>>(
       pointFeatures,
       getCoordinates,
       makePoint
     )
-    const cluster = clusters.getCluster(bounds, 1)
+    const cluster = clusters.getCluster(WORLD_BOUNDS, 1)
     const leaves = cluster[0]
       .leaves()
       .map(node => node.data.properties?.name || 'unknown')

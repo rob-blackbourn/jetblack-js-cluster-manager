@@ -14,25 +14,35 @@ export function isPointInside(point: Point, bounds: PointBounds): boolean {
   )
 }
 
+/**
+ * Create an array of nodes where close nodes are combined into
+ * a new cluster node.
+ *
+ * @param nodes The nodes from which to create a cluster.
+ * @param radius The maximum distance between which points are considered part of a cluster.
+ * @param minPoints The minimum number of points to make a cluster.
+ * @param nodeFactory A factory to create a cluster node.
+ * @returns An array of nodes where close points have been clustered.
+ */
 export function nodesForRadius<T>(
-  tree: ClusterGenerator<Node<T>>,
+  nodes: ClusterGenerator<Node<T>>,
   radius: number,
   minPoints: number,
   nodeFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
 ): Node<T>[] {
   const clusters: Node<T>[] = []
   // As nodes are used they are removed from the set.
-  const candidates = new Set(tree.points)
+  const candidates = new Set(nodes.points)
 
-  for (let i = 0; i < tree.points.length && candidates.size; ++i) {
-    const node = tree.points[i]
+  for (let i = 0; i < nodes.points.length && candidates.size; ++i) {
+    const node = nodes.points[i]
     if (!candidates.has(node)) {
       continue
     }
     candidates.delete(node)
 
     // find all nearby points that are still available.
-    const neighbors = tree
+    const neighbors = nodes
       .within(i, radius)
       .filter(neighbor => candidates.has(neighbor))
     let numPoints = sum(neighbors.map(n => n.count())) + node.count()

@@ -4,7 +4,7 @@ import { sum } from './utils'
 /**
  * A node in the cluster.
  *
- * @typeParam T The type of a point
+ * @typeParam T The type of a point.
  */
 export class Node<T> {
   /** The cartesian point derived fro the coordinate. */
@@ -21,7 +21,7 @@ export class Node<T> {
   /**
    * Create a new node.
    *
-   * @typeParam T The type of a point
+   * @typeParam T The type of a point.
    *
    * @param point The cartesian point for the coordinate.
    * @param coordinate The latitude and longitude.
@@ -59,7 +59,9 @@ export class Node<T> {
   /**
    * Return all of the leaf nodes from this node.
    *
-   * @returns The leaf nodes.
+   * @typeParam T The type of a point.
+   *
+   * @returns An array of leaf nodes.
    */
   leaves(): Node<T>[] {
     return this.nodes.length === 0

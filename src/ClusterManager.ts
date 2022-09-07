@@ -31,6 +31,7 @@ export class ClusterManager<T> {
     pointFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T,
     options: Partial<Options> = {}
   ) {
+    // Merge the options with the  default options.
     const {
       minZoom,
       maxZoom,

@@ -16,7 +16,11 @@ export class ClusterGenerator<T> {
   /** The point getter */
   private getPoint: (points: T) => Point
 
-  /** The array of points */
+  /**
+   * The array of points
+   *
+   * @typeParam T The type of a point.
+   */
   public points: T[]
 
   /**

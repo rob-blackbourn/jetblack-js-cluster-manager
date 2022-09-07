@@ -19,6 +19,7 @@ export interface Options {
   bounds: CoordinateBounds
 }
 
+/** The extreme north-west and south-east coordinates of the world. */
 export const WORLD_BOUNDS = {
   northWest: {
     latitude: 90,
