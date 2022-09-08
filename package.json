@@ -1,7 +1,7 @@
 {
   "name": "@jetblack/cluster-manager",
   "private": false,
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A geospatial point clustering library.",
   "keywords": [
     "clustering",
@@ -18,8 +18,9 @@
     "build": "rimraf dist && rollup -c",
     "dev": "rimraf dist && rollup -c -w",
     "test": "jest",
-    "build-docs": "typedoc",
-    "serve-docs": "http-server docs"
+    "build-docs": "typedoc --excludePrivate",
+    "watch-docs": "typedoc --excludePrivate --watch",
+    "serve-docs": "http-server -c-1 docs"
   },
   "dependencies": {
     "kdbush": "^3.0.0"

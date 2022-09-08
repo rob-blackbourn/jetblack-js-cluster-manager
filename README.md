@@ -4,8 +4,8 @@ A geospatial cluster manager ([read the docs](https://rob-blackbourn.github.io/j
 
 When a zoomable map contains a large number of points the map becomes cluttered
 and the performance is degraded when zoomed out. The cluster manager
-organizes the points into nodes where nearby points are combined into a single
-node.
+organizes the points into clusters where nearby points are combined into a
+single cluster.
 
 This package is based on the widely used and battle tested
 [supercluster](https://github.com/mapbox/supercluster)
@@ -13,8 +13,8 @@ This package is based on the widely used and battle tested
 
 * It represents the data as a tree of nodes to make the structure directly
   accessible.
-* It doesn't require the data to be presented in a specific shape, but takes a
-on  "getter" function to get the coordinate from the a point.
+* The points don't have to be presented in a specific shape, but take a
+  "getter" function to get the coordinate from the a point.
 * The world is wrap-around (i.e. a point on the far west equator is considered
   close to a point on the far east equator).
 
@@ -27,6 +27,9 @@ npm install --save @jetblack/cluster-manager
 ```
 
 ## Usage
+
+The following example shows how to use the cluster manager with geojson point
+features.
 
 ```js
 import { ClusterManager } from '@jetblack/cluster-manager'
@@ -106,4 +109,4 @@ for (const node of cluster) {
 
 # Acknowledgements
 
-* [supercluster](https://github.com/mapbox/supercluster)
+THis code was built on the work of [supercluster](https://github.com/mapbox/supercluster).

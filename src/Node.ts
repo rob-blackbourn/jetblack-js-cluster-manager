@@ -4,6 +4,10 @@ import { sum } from './utils'
 /**
  * A node in the cluster.
  *
+ * Nodes wrap the points of arbitrary types, and can form groups
+ * of neighboring nodes to form a cluster. For a cluster, the
+ * {@link Node.nodes | `nodes`} property will have entries.
+ *
  * @typeParam T The type of a point.
  */
 export class Node<T> {
