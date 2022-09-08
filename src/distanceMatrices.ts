@@ -26,7 +26,7 @@ function adjustPoint(
   const y = point.y + offset.y
   return {
     x: x < 0 ? x + width : x >= width ? x - width : x,
-    y: y < 0 ? y + height : y >= height ? y - height : y
+    y: point.y + offset.y
   }
 }
 
@@ -94,13 +94,19 @@ export function generateDistanceMatrix<T>(
 
   // Calculate the distance between all the points.
   for (let i = 0; i < data.length; ++i) {
-    const centerOffset = calcCenterOffset(getPoint(data[i]), rectangleCenter)
+    const targetPoint = data[i]
+    const centerOffset = calcCenterOffset(
+      getPoint(targetPoint),
+      rectangleCenter
+    )
 
     for (let j = i + 1; j < data.length; ++j) {
-      const point = adjustPoint(getPoint(data[j]), centerOffset, rectangle)
+      const otherPoint = data[j]
+      const point = adjustPoint(getPoint(otherPoint), centerOffset, rectangle)
       // The distance from a to be is the same as the distance
       // from b to a, so fill in both entries.
-      m[i][j].distance = m[j][i].distance = calcDistance(rectangleCenter, point)
+      const distance = calcDistance(rectangleCenter, point)
+      m[i][j].distance = m[j][i].distance = distance
     }
 
     // The distance from a to a is 0.

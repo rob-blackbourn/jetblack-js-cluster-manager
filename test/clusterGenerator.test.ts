@@ -48,39 +48,32 @@ describe('neighbors', () => {
     /*
      *  0         1
      * 0  01234567890123456789
-     *   0a
+     *   0a                  h
      *   1
-     *   2  b
+     *   2  b             g
      *   3
      *   4
      *   5
-     *   6      c
+     *   6      c   d  f
      *   7
-     *   8
+     *   8          e
      *   9
-     *  10          X
-     *  11
-     *  12
-     *  13
-     *  14                d
-     *  15
-     *  16
-     *  17
-     *  18
-     *  19                  e
      */
     const data: { name: string; point: Point }[] = [
       { name: 'a', point: { x: 0, y: 0 } },
       { name: 'b', point: { x: 2, y: 2 } },
       { name: 'c', point: { x: 6, y: 6 } },
-      { name: 'd', point: { x: 16, y: 14 } },
-      { name: 'e', point: { x: 18, y: 19 } }
+      { name: 'd', point: { x: 10, y: 6 } },
+      { name: 'e', point: { x: 10, y: 8 } },
+      { name: 'f', point: { x: 13, y: 6 } },
+      { name: 'g', point: { x: 16, y: 2 } },
+      { name: 'h', point: { x: 19, y: 0 } }
     ]
     const rectangle: Rectangle = {
       x: 0,
       y: 0,
       width: 20,
-      height: 20
+      height: 10
     }
     const generator = new ClusterGenerator(
       data,
@@ -89,7 +82,21 @@ describe('neighbors', () => {
       calcManhattanDistance
     )
 
-    const closest = generator.within(0, 2 + 2)
-    expect(closest.length).toBe(2)
+    const closestA = generator.within(0, 2 + 2)
+    expect(closestA.length).toBe(2)
+    const closestB = generator.within(1, 2 + 2)
+    expect(closestB.length).toBe(1)
+    const closestC = generator.within(2, 2 + 2)
+    expect(closestC.length).toBe(1)
+    const closestD = generator.within(3, 2 + 2)
+    expect(closestD.length).toBe(3)
+    const closestE = generator.within(4, 2 + 2)
+    expect(closestE.length).toBe(1)
+    const closestF = generator.within(5, 2 + 2)
+    expect(closestF.length).toBe(1)
+    const closestG = generator.within(6, 2 + 2)
+    expect(closestG.length).toBe(0)
+    const closestH = generator.within(6, 2 + 2)
+    expect(closestH.length).toBe(0)
   })
 })
