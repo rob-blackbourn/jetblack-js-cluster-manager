@@ -10,20 +10,15 @@ export interface DistancePoint {
 
 /**
  * Adjust a point by an offset. If the point lies outside
- * the rectangle, adjust it by wrapping around.
+ * the width of the rectangle, adjust it by wrapping around.
  *
  * @param point A point.
  * @param offset An offset, by which to adjust the point.
- * @param param2 The size of the rectangle.
+ * @param width The width of the rectangle.
  * @returns The adjusted point.
  */
-function adjustPoint(
-  point: Point,
-  offset: Point,
-  { width, height }: Size
-): Point {
+function adjustPoint(point: Point, offset: Point, width: number): Point {
   const x = point.x + offset.x
-  const y = point.y + offset.y
   return {
     x: x < 0 ? x + width : x >= width ? x - width : x,
     y: point.y + offset.y
@@ -94,19 +89,17 @@ export function generateDistanceMatrix<T>(
 
   // Calculate the distance between all the points.
   for (let i = 0; i < data.length; ++i) {
-    const targetPoint = data[i]
-    const centerOffset = calcCenterOffset(
-      getPoint(targetPoint),
-      rectangleCenter
-    )
+    const centerOffset = calcCenterOffset(getPoint(data[i]), rectangleCenter)
 
     for (let j = i + 1; j < data.length; ++j) {
-      const otherPoint = data[j]
-      const point = adjustPoint(getPoint(otherPoint), centerOffset, rectangle)
+      const point = adjustPoint(
+        getPoint(data[j]),
+        centerOffset,
+        rectangle.width
+      )
       // The distance from a to be is the same as the distance
       // from b to a, so fill in both entries.
-      const distance = calcDistance(rectangleCenter, point)
-      m[i][j].distance = m[j][i].distance = distance
+      m[i][j].distance = m[j][i].distance = calcDistance(rectangleCenter, point)
     }
 
     // The distance from a to a is 0.
