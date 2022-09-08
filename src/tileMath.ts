@@ -28,6 +28,12 @@ function yToLongitude(y: number): number {
   return (360 * Math.atan(Math.exp(y2))) / Math.PI - 90
 }
 
+/**
+ * Convert a coordinate to a point.
+ *
+ * @param param0 A coordinate.
+ * @returns A point.
+ */
 export const coordinateToPoint = ({
   latitude,
   longitude

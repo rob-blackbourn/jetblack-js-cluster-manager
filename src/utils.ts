@@ -1,33 +1,49 @@
+import { ClusterGenerator } from './ClusterGenerator'
 import { Node } from './Node'
 import { pointToCoordinate } from './tileMath'
-import { Coordinate } from './types'
+import { Coordinate, Point, PointBounds } from './types'
 
 export const sum = (a: number[]) => a.reduce((total, value) => total + value, 0)
 
-export function pop<V>(set: Set<V>): V {
-  const [value] = set.entries().next().value as [V, V]
-  set.delete(value)
-  return value
+export function isPointInside(point: Point, bounds: PointBounds): boolean {
+  return (
+    point.x >= bounds.topLeft.x &&
+    point.x <= bounds.bottomRight.x &&
+    point.y >= bounds.topLeft.y &&
+    point.y <= bounds.bottomRight.y
+  )
 }
 
+/**
+ * Create an array of nodes where close nodes are combined into
+ * a new cluster node.
+ *
+ * @param nodes The nodes from which to create a cluster.
+ * @param radius The maximum distance between which points are considered part of a cluster.
+ * @param minPoints The minimum number of points to make a cluster.
+ * @param nodeFactory A factory to create a cluster node.
+ * @returns An array of nodes where close points have been clustered.
+ */
 export function nodesForRadius<T>(
-  parentNodes: Node<T>[],
-  tree: KDBush<Node<T>>,
+  nodes: ClusterGenerator<Node<T>>,
   radius: number,
   minPoints: number,
-  dataFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
+  nodeFactory: (coordinate: Coordinate, nodes: Node<T>[]) => T
 ): Node<T>[] {
   const clusters: Node<T>[] = []
-  const candidates = new Set(parentNodes)
-
   // As nodes are used they are removed from the set.
-  while (candidates.size) {
-    const node = pop(candidates)
+  const candidates = new Set(nodes.points)
+
+  for (let i = 0; i < nodes.points.length && candidates.size; ++i) {
+    const node = nodes.points[i]
+    if (!candidates.has(node)) {
+      continue
+    }
+    candidates.delete(node)
 
     // find all nearby points that are still available.
-    const neighbors = tree
-      .within(node.point.x, node.point.y, radius)
-      .map(id => tree.points[id])
+    const neighbors = nodes
+      .within(i, radius)
       .filter(neighbor => candidates.has(neighbor))
     let numPoints = sum(neighbors.map(n => n.count())) + node.count()
 
@@ -53,7 +69,7 @@ export function nodesForRadius<T>(
         coordinate,
         cluster,
         node,
-        dataFactory(coordinate, cluster)
+        nodeFactory(coordinate, cluster)
       )
 
       clusters.push(clusterNode)
